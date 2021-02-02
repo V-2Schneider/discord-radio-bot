@@ -1,5 +1,6 @@
 # bot.py
 import os
+import random
 
 import discord
 from dotenv import load_dotenv
@@ -10,8 +11,17 @@ GUILD = os.getenv('DISCORD_GUILD')
 
 intents = discord.Intents.default()
 intents.members = True
+intents.presences = True
 
 client = discord.Client(intents=intents)
+
+def get_online_members(members):
+    result = []
+    for member in members:
+        if member.status in (discord.Status.online, discord.Status.idle) and client.user.id != member.id:
+            result.append(member)
+
+    return result
 
 @client.event
 async def on_ready():
@@ -24,7 +34,7 @@ async def on_ready():
         f'{guild.name}(id: {guild.id})'
     )
 
-    members = '\n - '.join([member.name for member in guild.members])
+    members = '\n - '.join([member.name + " " + member.raw_status for member in guild.members])
     print(f'Guild Members:\n - {members}')
 
 @client.event
@@ -33,7 +43,15 @@ async def on_message(message):
         return
     
     if message.content == "!radio":
-        response = "To testowe wylosowanie"
+        for guild in client.guilds:
+            if guild.name == GUILD:
+                break
+
+        online_list = get_online_members(guild.members)
+
+        person = random.choice(online_list)
+        response = person.mention + " jest teraz DJem!"
         await message.channel.send(response)
 
 client.run(TOKEN)
+
