@@ -2,6 +2,10 @@
 import os
 import random
 
+import datetime
+from datetime import date
+from datetime import datetime
+
 import discord
 from dotenv import load_dotenv
 
@@ -49,11 +53,24 @@ async def on_message(message):
             if guild.name == GUILD:
                 break
 
-        online_list = get_online_members(guild.members)
-
-        person = random.choice(online_list)
+        person = checkIfSpecial(guild.members)
+        if person == None:
+            online_list = get_online_members(guild.members)
+            person = random.choice(online_list)
+            
         response = person.mention + " jest teraz DJem!"
         await message.channel.send(response)
+        
+def checkIfSpecial(members):
+    name = os.getenv('SPECIAL_NAME')
+    special_date = datetime.strptime(os.getenv('SPECIAL_DATE'), '%d/%m/%y')
+    if (date.today() == special_date.date()):
+        for member in members:
+            if name in member.name:
+                print("It's a special day!")
+                return member
+            
+    return None
 
     if "Bocie" in message.content:
         await message.channel.send("Co? Nie potrafię tego zrobić")
