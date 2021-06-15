@@ -25,6 +25,8 @@ def get_online_members(members):
 
 @client.event
 async def on_ready():
+    await client.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name="d-_-b"))
+
     for guild in client.guilds:
         if guild.name == GUILD:
             break
@@ -42,7 +44,7 @@ async def on_message(message):
     if message.author == client.user:
         return
     
-    if message.content == "!radio":
+    if message.content.lower() == "!radio":
         for guild in client.guilds:
             if guild.name == GUILD:
                 break
@@ -52,6 +54,9 @@ async def on_message(message):
         person = random.choice(online_list)
         response = person.mention + " jest teraz DJem!"
         await message.channel.send(response)
+
+    if "Bocie" in message.content:
+        await message.channel.send("Co? Nie potrafię tego zrobić")
 
 client.run(TOKEN)
 
