@@ -60,6 +60,9 @@ async def on_message(message):
             
         response = person.mention + " jest teraz DJem!"
         await message.channel.send(response)
+
+    if "bocie" in message.content.lower():
+        await message.channel.send("Co? Nie potrafię tego zrobić")
         
 def checkIfSpecial(members):
     name = os.getenv('SPECIAL_NAME')
@@ -71,9 +74,6 @@ def checkIfSpecial(members):
                 return member
             
     return None
-
-    if "Bocie" in message.content:
-        await message.channel.send("Co? Nie potrafię tego zrobić")
 
 client.run(TOKEN)
 
