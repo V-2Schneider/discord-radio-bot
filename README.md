@@ -6,3 +6,4 @@ TODO:
 - Menu with help and leaderboards
 - Counter of the number of times someone was selected 
 - Spreadsheet of all music uploaded by people (it should check if someone sends a spotify link and then add it to the spreadsheet), I guess that I should use one of google's API's to do that
+- !jedzenie - list of different types of foods that we can choose and order
