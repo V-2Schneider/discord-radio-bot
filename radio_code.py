@@ -6,6 +6,8 @@ import datetime
 from datetime import date
 from datetime import datetime
 
+import aiocron
+
 import discord
 from dotenv import load_dotenv
 
@@ -18,6 +20,8 @@ intents.members = True
 intents.presences = True
 
 client = discord.Client(intents=intents)
+
+debug_mode = True
 
 def get_online_members(members):
     result = []
@@ -74,6 +78,13 @@ def checkIfSpecial(members):
                 return member
             
     return None
+
+
+@aiocron.crontab('* * * * *')
+async def regularRadio():
+    channel_id = os.getenv('DEBUG_ID') if debug_mode else os.getenv('RADIO_ID')
+    channel = client.get_channel(int(channel_id))
+    await channel.send('Testing!')
 
 client.run(TOKEN)
 
