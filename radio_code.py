@@ -74,6 +74,8 @@ def rollAndReturn():
     person = checkIfSpecial(guild.members)
     if person == None:
         online_list = get_online_members(guild.members)
+        if not len(online_list):
+            return "Nikogo nie ma w domu..."
         person = random.choice(online_list)
         
     response = person.mention + " jest teraz DJem!"
