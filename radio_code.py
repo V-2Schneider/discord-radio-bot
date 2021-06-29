@@ -62,7 +62,7 @@ def checkIfSpecial(members):
     special_date = datetime.strptime(os.getenv('SPECIAL_DATE'), '%d/%m/%y')
     if (date.today() == special_date.date()):
         for member in members:
-            if name in member.name:
+            if name in member.name and member.status in (discord.Status.online, discord.Status.idle):
                 print("It's a special day!")
                 return member
             
@@ -80,7 +80,7 @@ def rollAndReturn():
     return response
             
 
-@aiocron.crontab('0/10 8-20 * * MON,TUE,WED,THU,FRI')
+@aiocron.crontab('0/10 8-17 * * MON,TUE,WED,THU,FRI')
 async def regularRadio():
     channel_id = os.getenv('DEBUG_ID') if debug_mode else os.getenv('RADIO_ID')
     channel = client.get_channel(int(channel_id))
