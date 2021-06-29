@@ -13,7 +13,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
-GUILD = os.getenv('DISCORD_GUILD')
+GUILD = int(os.getenv('DISCORD_GUILD'))
 
 intents = discord.Intents.default()
 intents.members = True
@@ -35,9 +35,7 @@ def get_online_members(members):
 async def on_ready():
     await client.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name="d-_-b"))
 
-    for guild in client.guilds:
-        if guild.name == GUILD:
-            break
+    guild = client.get_guild(GUILD)
 
     print(
         f'{client.user} is connected to the following guild:\n'
@@ -53,16 +51,7 @@ async def on_message(message):
         return
     
     if message.content.lower() == "!radio":
-        for guild in client.guilds:
-            if guild.name == GUILD:
-                break
-
-        person = checkIfSpecial(guild.members)
-        if person == None:
-            online_list = get_online_members(guild.members)
-            person = random.choice(online_list)
-            
-        response = person.mention + " jest teraz DJem!"
+        response = rollAndReturn()
         await message.channel.send(response)
 
     if "bocie" in message.content.lower():
@@ -79,12 +68,25 @@ def checkIfSpecial(members):
             
     return None
 
+def rollAndReturn():
+    guild = client.get_guild(GUILD)
 
-@aiocron.crontab('* * * * *')
+    person = checkIfSpecial(guild.members)
+    if person == None:
+        online_list = get_online_members(guild.members)
+        person = random.choice(online_list)
+        
+    response = person.mention + " jest teraz DJem!"
+    return response
+            
+
+@aiocron.crontab('0/10 8-20 * * MON,TUE,WED,THU,FRI')
 async def regularRadio():
     channel_id = os.getenv('DEBUG_ID') if debug_mode else os.getenv('RADIO_ID')
     channel = client.get_channel(int(channel_id))
-    await channel.send('Testing!')
+    response = rollAndReturn()
+    await channel.send(response)
+
 
 client.run(TOKEN)
 
