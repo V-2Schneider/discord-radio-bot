@@ -21,7 +21,7 @@ intents.presences = True
 
 client = discord.Client(intents=intents)
 
-debug_mode = True
+debug_mode = False
 
 def get_online_members(members):
     result = []
