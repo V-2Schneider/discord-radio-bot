@@ -82,7 +82,7 @@ def rollAndReturn():
     return response
             
 
-@aiocron.crontab('0/10 8-17 * * MON,TUE,WED,THU,FRI')
+@aiocron.crontab('0 8-17 * * MON,TUE,WED,THU,FRI')
 async def regularRadio():
     channel_id = os.getenv('DEBUG_ID') if debug_mode else os.getenv('RADIO_ID')
     channel = client.get_channel(int(channel_id))
